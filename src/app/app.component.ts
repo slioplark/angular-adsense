@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +9,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class AppComponent implements OnInit {
 
   title = 'angular-adsense';
+  document: AngularFirestoreDocument;
+  collection: AngularFirestoreCollection;
 
   constructor(private db: AngularFirestore) { }
 
@@ -18,15 +20,29 @@ export class AppComponent implements OnInit {
   }
 
   getCollection() {
-    this.db.collection('/Marvel').valueChanges().subscribe(res => {
+    this.collection = this.db.collection('/Marvel');
+    this.collection.valueChanges().subscribe(res => {
       console.log('collection', res);
     });
   }
 
   getDocument() {
-    this.db.doc('/Marvel/EAXDM2sRqG3pJY3eVZCe').valueChanges().subscribe(res => {
+    this.document = this.db.doc('/Marvel/XzGReB5uWt1v2Q66Faox');
+    this.document.valueChanges().subscribe(res => {
       console.log('document', res);
     });
+  }
+
+  createDocument() {
+    this.collection.add({ name: '鋼鐵人' });
+  }
+
+  updateDocument() {
+    this.document.update({ name: '雷神' });
+  }
+
+  deleteDocument() {
+    this.document.delete();
   }
 
 }
